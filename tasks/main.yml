@@ -1,5 +1,8 @@
 ---
-  - include: "{{ ansible_os_family }}.yml"
+
+  - include: Debian.yml
+    when: ansible_os_family == 'Debian'
+    become: true
 
   - name: Ensure Radarr service group exists
     group:
@@ -7,6 +10,7 @@
       gid: "{{ Radarr_group_gid }}"
       system: true
       state: present
+    become: true
 
   - name: Ensure Radarr service user exists
     user:
@@ -16,6 +20,7 @@
       home: "{{ Radarr_user_home }}"
       system: true
       state: present
+    become: true
 
   - name: Ensure Radarr dependencies are installed
     package: name={{ Radarr_dependencies }} state=present
@@ -29,12 +34,15 @@
     with_items:
       - "{{ Radarr_data_path }}"
       - "{{ Radarr_user_home }}/bin"
+    become: true
 #Radarr_user_home: /var/lib/{{ Radarr_user_name }}
 #Radarr_data_path: "{{ Radarr_user_home }}/data"
 
   - name: Get Radar exe url
     shell: curl -s https://api.github.com/repos/Radarr/Radarr/releases | grep linux.tar.gz | grep browser_download_url | head -1 | cut -d \" -f 4
     register: shell_output
+    become: true
+
   - set_fact:
       Radarr_exe_url : "{{ shell_output.stdout }}"
 
@@ -62,6 +70,7 @@
       owner: root
       group: root
       mode: 0600
+    become: true
     notify:
       - Reload Radarr service config
       - Restart Radarr service
@@ -70,3 +79,4 @@
 
   - name: Ensure the Radarr service is running and enabled on boot
     service: name=radarr state=started enabled=yes
+    become: true

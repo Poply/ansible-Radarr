@@ -7,20 +7,20 @@
 
   - name: Ensure the Mono APT repository is present
     apt_repository:
-      repo: 'deb http://download.mono-project.com/repo/debian wheezy main'
+      repo: 'deb http://download.mono-project.com/repo/debian stable-buster main'
       state: present
 
-  - name: Ensure the Mono Xamarin APT repository is present [Ubuntu]
-    apt_repository:
-      repo: 'deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main'
-      state: present
-    when: ansible_distribution == "Ubuntu"
+#  - name: Ensure the Mono Xamarin APT repository is present [Ubuntu]
+#    apt_repository:
+#      repo: 'deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main'
+#      state: present
+#    when: ansible_distribution == "Ubuntu"
 
-  - name: Ensure the Mono Xamarin APT repository is present [Debian]
-    apt_repository:
-      repo: 'deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat main'
-      state: present
-    when: ansible_distribution == "Debian"
+#  - name: Ensure the Mono Xamarin APT repository is present [Debian]
+#    apt_repository:
+#      repo: 'deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat main'
+#      state: present
+#    when: ansible_distribution == "Debian"
 
   - name: Ensure mediainfo is installed
     package: name=mediainfo state=present
